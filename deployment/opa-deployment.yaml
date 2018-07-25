@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opa
+spec:
+  selector:
+    matchLabels:
+      app: opa
+      role: master
+      tier: backend
+  replicas: 1
+  template: 
+    metadata:
+      labels: 
+        app: opa
+        role: master
+        tier: backend
+    spec:
+      #      restartPolicy: OnFailure
+      containers:
+      - name: opa
+        image: openpolicyagent/opa:0.8.2
+        resources: 
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 8181
+        args:
+          - run
+          - --server

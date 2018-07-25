@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-server
+spec:
+  selector:
+    matchLabels:
+      app: api-server
+      role: master
+      tier: frontend
+  replicas: 1
+  template: 
+    metadata:
+      labels: 
+        app: api-server
+        role: master
+        tier: frontend
+    spec:
+      containers:
+      - name: api-server
+        image: openpolicyagent/demo-restful-api:latest
+        resources: 
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 5000
+        env:
+        - name: OPA_ADDR
+          value: "http://opa:8181"
+        - name: POLICY_PATH
+          value: "/v1/data/httpapi/authz"
